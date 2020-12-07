@@ -60,7 +60,9 @@ namespace m4x1m1l14n
 			ChangeAttributes = REG_NOTIFY_CHANGE_ATTRIBUTES,
 			ChangeLastSet = REG_NOTIFY_CHANGE_LAST_SET,
 			ChangeSecurity = REG_NOTIFY_CHANGE_SECURITY,
+#if (WINVER >= 0x0602)
 			ThreadAgnostic = REG_NOTIFY_THREAD_AGNOSTIC
+#endif
 		};
 
 		DEFINE_ENUM_FLAG_OPERATORS(NotifyFilter);
