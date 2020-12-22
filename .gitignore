@@ -5,3 +5,5 @@
 *.vcxproj.*
 *.VC.*
 *.ipch
+Registry/Debug
+Registry/Release
