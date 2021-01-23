@@ -14,7 +14,7 @@
 
 namespace m4x1m1l14n {
 namespace Registry {
-#ifdef _UNICODE
+#ifdef UNICODE
 using StringType = std::wstring;
 #else
 using StringType = std::string;
@@ -84,7 +84,7 @@ DEFINE_ENUM_FLAG_OPERATORS(NotifyFilter);
 			virtual bool GetBoolean() const { return false; }
 			virtual long GetInt32() const { return 0; }
 			virtual long long GetInt64() const { return 0; }
-			virtual std::wstring GetString() const { return std::wstring(); }
+            virtual StringType GetString() const { return StringType(); }
 			virtual std::shared_ptr<BYTE> GetBinary() const { return std::shared_ptr<BYTE>(); }
 		};
 
@@ -129,11 +129,11 @@ DEFINE_ENUM_FLAG_OPERATORS(NotifyFilter);
 			long long GetInt64() const override { return m_value; }
 		};
 
-		class RegistryString final : public Value<ValueType::STRING, std::wstring> {
+        class RegistryString final : public Value<ValueType::STRING, StringType> {
 		public:
-			RegistryString(const std::wstring& value) : Value(value) {}
+            RegistryString(const StringType& value) : Value(value) {}
 
-			std::wstring GetString() const override { return m_value; }
+            StringType GetString() const override { return m_value; }
 		};
 
 		class RegistryBinary final : public Value<ValueType::BINARY, std::shared_ptr<BYTE>> {
@@ -750,7 +750,7 @@ public:
   }
 
 #if 0
-			std::shared_ptr<BYTE> GetBinary(const std::wstring& name, size_t len) 
+            std::shared_ptr<BYTE> GetBinary(const StringType& name, size_t len)
 			{
 				DWORD cbData = DWORD(len);
 				BYTE *data = new BYTE[len];
@@ -768,7 +768,7 @@ public:
 				return ret;
 			}
 
-			bool SetBinary(const std::wstring& name, const BYTE* pData, size_t len) 
+            bool SetBinary(const StringType& name, const BYTE* pData, size_t len)
 			{
 				DWORD cbData = DWORD(len);
 
@@ -777,7 +777,7 @@ public:
 				return (lStatus == ERROR_SUCCESS);
 			}
 
-			RegistryValue GetValue(const std::wstring& name) 
+            RegistryValue GetValue(const StringType& name)
 			{
 				assert(m_hKey != nullptr);
 				DWORD dwType = 0;
@@ -822,7 +822,7 @@ public:
 								LSTATUS lStatus = RegQueryValueEx(m_hKey, name.c_str(), nullptr, nullptr, (LPBYTE)data, &cbData);
 								if (lStatus == ERROR_SUCCESS) 
 								{
-									std::wstring s(data, cbData);
+                                    StringType s(data, cbData);
 									ret = RegistryString(s);
 								}
 
@@ -859,7 +859,7 @@ public:
 				return ret;
 			}
 
-			void SetValue(const std::wstring& valueName, const RegistryValue& value) 
+            void SetValue(const StringType& valueName, const RegistryValue& value)
 			{
 				switch (value.GetType())
 				{
@@ -873,9 +873,9 @@ public:
 #endif
 
 #if 0
-			std::vector<std::wstring> GetSubKeys()
+            std::vector<StringType> GetSubKeys()
 			{
-				std::vector<std::wstring> vecRet;
+                std::vector<StringType> vecRet;
 				DWORD    dwSubKeys = 0;
 				DWORD	dwMaxSubKeyLen = 0;
 				LSTATUS lStatus = RegQueryInfoKey(m_hKey, NULL, NULL, NULL, &dwSubKeys, NULL, NULL, NULL, &dwMaxSubKeyLen, NULL, NULL, NULL);
@@ -889,7 +889,7 @@ public:
 						lStatus = RegEnumKeyEx(m_hKey, i, pwszName, &dwNameLen, NULL, NULL, NULL, NULL);
 						if (lStatus == ERROR_SUCCESS)
 						{
-							vecRet.push_back(std::wstring(pwszName, dwNameLen));
+                            vecRet.push_back(StringType(pwszName, dwNameLen));
 						}
 					}
 				}
