@@ -3,5 +3,13 @@
 /obj/*
 *.suo
 *.vcxproj.*
+*.vcxproj
 *.VC.*
 *.ipch
+Registry/Debug
+Registry/Release
+CMakeFiles
+Debug
+Release
+*.cmake
+*.sln
